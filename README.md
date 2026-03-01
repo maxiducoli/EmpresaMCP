@@ -191,7 +191,4 @@ Autor: [Tu Nombre]
 LinkedIn: Tu Perfil
 Email: tu.email@ejemplo.com
 
-<div align="center">
-
 ¿Te gustó este proyecto? ⭐ Dale una estrella y compartilo!
-</div>
