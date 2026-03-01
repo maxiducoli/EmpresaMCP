@@ -115,15 +115,17 @@ ollama list
 dotnet run --project EmpresaMCP.Web
 
 La aplicación estará disponible en: https://localhost:7001 (o el puerto que configure VS)
+
 📸 Capturas de Pantalla
-Chat Principal
 
-API Response
+![Chat de la aplicación](docs/screenshots/chat.png)
 
-Estructura del Proyecto
 
-💡 Tip: Creá una carpeta docs/screenshots/ y guardá ahí tus capturas.
-🎯 Endpoints de la API
+![API Response](docs/screenshots/json.png)
+![Estructura del Proyecto](docs/screenshots/estructura.png)
+
+🎯 Endpoints de la API[Uploading activos.json…]()
+
 Método
 Endpoint
 Descripción
@@ -153,7 +155,15 @@ Datos completos del empleado
 "¿Qué empleados ingresaron en 2015?"
 Filtrado por fecha
 📁 Estructura del Proyecto
-1234567891011121314151617181920
+EmpresaMCP/
+├── docs/
+│   └── screenshots/
+│       ├── chat.png
+│       ├── api-response.png
+│       └── project-structure.png
+├── EmpresaMCP.Web/
+├── EmpresaMCP.Core/
+└── README.md
 
 🔐 Seguridad y Consideraciones
 ✅ La IA no tiene acceso directo a la BD: Usa APIs controladas
@@ -180,3 +190,8 @@ Este proyecto está bajo la licencia MIT. Ver el archivo LICENSE para más detal
 Autor: [Tu Nombre]
 LinkedIn: Tu Perfil
 Email: tu.email@ejemplo.com
+
+<div align="center">
+
+¿Te gustó este proyecto? ⭐ Dale una estrella y compartilo!
+</div>
