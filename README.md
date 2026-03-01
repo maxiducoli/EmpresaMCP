@@ -118,11 +118,15 @@ La aplicación estará disponible en: https://localhost:7001 (o el puerto que co
 
 📸 Capturas de Pantalla
 
-![Chat de la aplicación](docs/screenshots/chat.png)
+Chat de la aplicación:
+<img width="1440" height="900" alt="Chat" src="https://github.com/user-attachments/assets/a37c45dd-10db-4058-8ab3-c5d39c479d01" />
 
+API Response
+<img width="1440" height="900" alt="json" src="https://github.com/user-attachments/assets/25616702-52b3-4d13-bf15-6edb9678934e" />
 
-![API Response](docs/screenshots/json.png)
-![Estructura del Proyecto](docs/screenshots/estructura.png)
+Estructura del Proyecto
+<img width="442" height="701" alt="estructura" src="https://github.com/user-attachments/assets/d035ea74-3bb0-4d3e-b070-022b3b5027ca" />
+
 
 🎯 Endpoints de la API[Uploading activos.json…]()
 
