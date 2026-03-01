@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Chat con IA - Empleados";
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Chat con IA - Consulta sobre Empleados</h1>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Hacé tu pregunta</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Consultar" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <label for="pregunta" class="form-label">¿Qué querés saber?</label>
+                            <textarea class="form-control"
+                                      id="pregunta"
+                                      name="pregunta"
+                                      rows="3"
+                                      placeholder="Ejemplo: ¿Cuántos empleados hay en la empresa?"
+                                      required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Consultar
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            @if (ViewBag.Pregunta != null)
+            {
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">Tu pregunta</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">@ViewBag.Pregunta</p>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Respuesta de la IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">@ViewBag.Respuesta</p>
+                    </div>
+                </div>
+            }
+
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Ejemplos de preguntas</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li class="mb-2">¿Cuántos empleados hay en total?</li>
+                        <li class="mb-2">Buscá empleados llamados Carlos</li>
+                        <li class="mb-2">Mostrame los datos del empleado 1</li>
+                        <li class="mb-2">¿Qué empleados ingresaron en 2015?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h5 class="mb-0">Información</h5>
+                </div>
+                <div class="card-body">
+                    <p>Este chat te permite consultar información de empleados usando inteligencia artificial.</p>
+                    <p><strong>Modelo:</strong> Qwen 2.5 Coder 7B</p>
+                    <p><strong>Ejecución:</strong> Local (Ollama)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

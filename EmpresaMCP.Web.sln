@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37012.4 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpresaMCP.Web", "EmpresaMCP.Web\EmpresaMCP.Web.csproj", "{B83A560D-E71C-48C7-9B6D-4B2A3FBBAB0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpresaMCP.Core", "EmpresaMCP.Core\EmpresaMCP.Core.csproj", "{4C896F84-C4D0-41E5-A303-12F93CCFD499}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B83A560D-E71C-48C7-9B6D-4B2A3FBBAB0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83A560D-E71C-48C7-9B6D-4B2A3FBBAB0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83A560D-E71C-48C7-9B6D-4B2A3FBBAB0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83A560D-E71C-48C7-9B6D-4B2A3FBBAB0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C896F84-C4D0-41E5-A303-12F93CCFD499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C896F84-C4D0-41E5-A303-12F93CCFD499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C896F84-C4D0-41E5-A303-12F93CCFD499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C896F84-C4D0-41E5-A303-12F93CCFD499}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {344E0150-67A0-4C07-95D1-FF93E8BDB9D1}
+	EndGlobalSection
+EndGlobal
