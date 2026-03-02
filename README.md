@@ -152,7 +152,9 @@ EmpresaMCP/
 ✅ La IA no tiene acceso directo a la BD: Usa APIs controladas
 ✅ Solo empleados activos: Las consultas filtran por defecto
 ✅ Validación de parámetros: Los IDs y términos se validan antes de consultar
+
 ⚠️ Desarrollo local: No usar en producción sin autenticación y HTTPS
+
 🧠 Lo que aprendí construyendo este proyecto
 Integración de LLMs locales con aplicaciones .NET
 Implementación de function calling sin SDKs externos
@@ -160,6 +162,7 @@ Arquitectura limpia con separación de responsabilidades
 Uso de Entity Framework Core con SQL Server
 Creación de APIs REST en ASP.NET Core
 Prompt engineering para guiar al LLM
+
 🚧 Próximas Mejoras (Roadmap)
 Agregar más herramientas (Departamentos, Cargos, Salarios)
 Historial de conversaciones
@@ -167,11 +170,13 @@ Autenticación de usuarios
 Logging de consultas para auditoría
 Deploy en Azure/AWS
 Implementar MCP protocol nativo cuando esté estable
+
 📄 Licencia
 Este proyecto está bajo la licencia MIT. Ver el archivo LICENSE para más detalles.
+
 🤝 Contacto
-Autor: [Tu Nombre]
-LinkedIn: Tu Perfil
-Email: tu.email@ejemplo.com
+Autor: Maximiliano David Ducoli
+LinkedIn: https://www.linkedin.com/in/maxiducoli/
+Email: maxiducoli@gmail.com
 
 ¿Te gustó este proyecto? ⭐ Dale una estrella y compartilo!
