@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using EmpresaMCP.Core.Interfaces;
+using EmpresaMCP.Core.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +8,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EmpresaMCP.Core.Data.EmpresaDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("EmpresaDB")));
 
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 // Registrar servicio de Ollama
 builder.Services.AddHttpClient<EmpresaMCP.Web.Services.OllamaService>();
 
