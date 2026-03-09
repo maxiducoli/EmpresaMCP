@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace EmpresaMCP.Core.Entities
 {
-    public class Sectores
+    public class Sector
     {
-        public int SectorId { get; set; }
+        public int SectorID { get; set; }
         public string Nombre { get; set; } = string.Empty;
         public string Descripcion { get; set; } = string.Empty;
-        public int DepartamentoId { get; set; }
-        public int JefeSectorId { get; set; }
+        public int DepartamentoID { get; set; }
+        public int JefeSectorID { get; set; }
         public int Activo { get; set; }
         public DateTime FechaCreacion { get; set; }
     }

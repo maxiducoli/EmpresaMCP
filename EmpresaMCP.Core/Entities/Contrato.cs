@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmpresaMCP.Core.Entities
 {
-    public class Contratos
+    public class Contrato
     {
         public int ContratoID { get; set; }
         public int EmpleadoID { get; set; }

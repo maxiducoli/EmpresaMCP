@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace EmpresaMCP.Core.Entities
 {
-    public class Salarios
+    public class Salario
     {
-        public int EmpleadoId { get; set; }
+        public int SalarioID { get; set; }
+        public int EmpleadoID { get; set; }
         public decimal SalarioBase { get; set; }
         public decimal Bonificaciones { get; set; }
         public decimal Deducciones { get; set; }
-        public Decimal SalarioNetro { get; set; }  
+        public Decimal SalarioNeto { get; set; }  
         public decimal Moneda { get; set; }
         public DateTime FechaVigencia { get; set; }
         public DateTime FechaFin { get; set; }

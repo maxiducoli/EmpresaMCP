@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace EmpresaMCP.Core.Entities
 {
-    public  class Asistencias
+    public  class Asistencia
     {
-        public int AsistenciaID { get; set; }
+        public int AsistenciaID { get; private set; }
         public int EmpleadoID { get; set; }
         public DateTime Fecha { get; set; }
         public TimeSpan? HoraEntrada { get; set; }
         public TimeSpan? HoraSalida { get; set; }
         public string? Estado { get; set; }
         public string? Observaciones { get; set; }
-        public byte? Activo { get; set; }
         public DateTime FechaCreacion { get; set; }
     }
 }
