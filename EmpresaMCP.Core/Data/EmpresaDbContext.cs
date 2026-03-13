@@ -14,13 +14,14 @@ namespace EmpresaMCP.Core.Data
         }
 
         // DbSet = cada tabla en la base de datos
-        public DbSet<Empleado> Empleados { get; set; }
-        public DbSet<Departamento> Departamentos { get; set; }
-        public DbSet<Asistencia> Asistencias { get; set; }
-        public DbSet<Cargo> Cargos { get; set; }
-        public DbSet<Contrato> Contratos { get; set; }
-        public DbSet<Salario> Salarios { get; set; }
-        public DbSet<Sector> Sectores { get; set; }
+        public DbSet<Empleados> Empleados { get; set; }
+        public DbSet<Departamentos> Departamentos { get; set; }
+        public DbSet<Asistencias> Asistencias { get; set; }
+        public DbSet<Cargos> Cargos { get; set; }
+        public DbSet<Contratos> Contratos { get; set; }
+        public DbSet<Salarios> Salarios { get; set; }
+        public DbSet<Sectores> Sectores { get; set; }
+        public DbSet<Plantas> Plantas { get; set; }
 
 
         // Configuración adicional de las tablas y relaciones
@@ -31,7 +32,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // EMPLEADOS
             // ============================================
-            modelBuilder.Entity<Empleado>(entity =>
+            modelBuilder.Entity<Empleados>(entity =>
             {
                 entity.HasKey(e => e.EmpleadoID);
                 entity.ToTable("Empleados");
@@ -70,28 +71,28 @@ namespace EmpresaMCP.Core.Data
                     .HasMaxLength(10);
 
                 // Relaciones con otras tablas
-                entity.HasOne<Cargo>()
+                entity.HasOne<Cargos>()
                     .WithMany()
                     .HasForeignKey(e => e.CargoID)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Sector>()
+                entity.HasOne<Sectores>()
                     .WithMany()
                     .HasForeignKey(e => e.SectorID)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Departamento>()
+                entity.HasOne<Departamentos>()
                     .WithMany()
                     .HasForeignKey(e => e.DepartamentoID)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Planta>()
+                entity.HasOne<Plantas>()
                     .WithMany()
                     .HasForeignKey(e => e.PlantaID)
                     .OnDelete(DeleteBehavior.Restrict);
 
                 // Relación recursiva (JefeDirectoID → otro Empleado)
-                entity.HasOne<Empleado>()
+                entity.HasOne<Empleados>()
                     .WithMany()
                     .HasForeignKey(e => e.JefeDirectoID)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -100,7 +101,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // ASISTENCIAS
             // ============================================
-            modelBuilder.Entity<Asistencia>(entity =>
+            modelBuilder.Entity<Asistencias>(entity =>
             {
                 entity.HasKey(e => e.AsistenciaID);
                 entity.ToTable("Asistencias");
@@ -111,7 +112,7 @@ namespace EmpresaMCP.Core.Data
                 entity.Property(e => e.Observaciones)
                     .HasMaxLength(500);
 
-                entity.HasOne<Empleado>()
+                entity.HasOne<Empleados>()
                     .WithMany()
                     .HasForeignKey(e => e.EmpleadoID)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -120,7 +121,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // CARGOS
             // ============================================
-            modelBuilder.Entity<Cargo>(entity =>
+            modelBuilder.Entity<Cargos>(entity =>
             {
                 entity.HasKey(e => e.CargoID);
                 entity.ToTable("Cargos");
@@ -142,7 +143,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // CONTRATOS
             // ============================================
-            modelBuilder.Entity<Contrato>(entity =>
+            modelBuilder.Entity<Contratos>(entity =>
             {
                 entity.HasKey(e => e.ContratoID);
                 entity.ToTable("Contratos");
@@ -157,7 +158,7 @@ namespace EmpresaMCP.Core.Data
                 entity.Property(e => e.Observaciones)
                     .HasMaxLength(500);
 
-                entity.HasOne<Empleado>()
+                entity.HasOne<Empleados>()
                     .WithMany()
                     .HasForeignKey(e => e.EmpleadoID)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -166,7 +167,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // DEPARTAMENTOS
             // ============================================
-            modelBuilder.Entity<Departamento>(entity =>
+            modelBuilder.Entity<Departamentos>(entity =>
             {
                 entity.HasKey(e => e.DepartamentoID);
                 entity.ToTable("Departamentos");
@@ -181,7 +182,7 @@ namespace EmpresaMCP.Core.Data
                 entity.Property(e => e.PresupuestoAnual)
                     .HasPrecision(18, 2);
 
-                entity.HasOne<Planta>()
+                entity.HasOne<Plantas>()
                     .WithMany()
                     .HasForeignKey(e => e.PlantaID)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -190,10 +191,10 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // PLANTA
             // ============================================
-            modelBuilder.Entity<Planta>(entity =>
+            modelBuilder.Entity<Plantas>(entity =>
             {
                 entity.HasKey(e => e.PlantaID);
-                entity.ToTable("Planta");
+                entity.ToTable("Plantas");
 
                 entity.Property(e => e.Nombre)
                     .IsRequired()
@@ -221,7 +222,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // SALARIOS
             // ============================================
-            modelBuilder.Entity<Salario>(entity =>
+            modelBuilder.Entity<Salarios>(entity =>
             {
                 entity.HasKey(e => e.SalarioID);
                 entity.ToTable("Salarios");
@@ -242,7 +243,7 @@ namespace EmpresaMCP.Core.Data
                 entity.Property(e => e.SalarioNeto)
                     .HasPrecision(18, 2);
 
-                entity.HasOne<Empleado>()
+                entity.HasOne<Empleados>()
                     .WithMany()
                     .HasForeignKey(e => e.EmpleadoID)
                     .OnDelete(DeleteBehavior.Restrict);
@@ -251,7 +252,7 @@ namespace EmpresaMCP.Core.Data
             // ============================================
             // SECTORES
             // ============================================
-            modelBuilder.Entity<Sector>(entity =>
+            modelBuilder.Entity<Sectores>(entity =>
             {
                 entity.HasKey(e => e.SectorID);
                 entity.ToTable("Sectores");
@@ -263,12 +264,12 @@ namespace EmpresaMCP.Core.Data
                 entity.Property(e => e.Descripcion)
                     .HasMaxLength(500);
 
-                entity.HasOne<Departamento>()
+                entity.HasOne<Departamentos>()
                     .WithMany()
                     .HasForeignKey(e => e.DepartamentoID)
                     .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne<Empleado>()
+                entity.HasOne<Empleados>()
                     .WithMany()
                     .HasForeignKey(e => e.JefeSectorID)
                     .OnDelete(DeleteBehavior.Restrict);

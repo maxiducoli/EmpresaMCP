@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmpresaMCP.Core.Entities
 {
-    public  class Asistencia
+    public  class Asistencias
     {
         public int AsistenciaID { get; private set; }
         public int EmpleadoID { get; set; }
@@ -16,5 +16,6 @@ namespace EmpresaMCP.Core.Entities
         public string? Estado { get; set; }
         public string? Observaciones { get; set; }
         public DateTime FechaCreacion { get; set; }
+        public bool? Activo { get; set; }
     }
 }

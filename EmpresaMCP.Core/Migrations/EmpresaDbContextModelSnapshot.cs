@@ -71,7 +71,7 @@ namespace EmpresaMCP.Core.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NivelGerarquico")
+                    b.Property<int>("NivelJerarquico")
                         .HasColumnType("int");
 
                     b.Property<string>("Nombre")

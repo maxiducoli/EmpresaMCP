@@ -6,62 +6,62 @@ namespace EmpresaMCP.Web.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmpleadosApiController : ControllerBase
+    public class AsistenciasApiController : ControllerBase
     {
-        private readonly IEmpleadosRepository _repo;
+        private readonly IAsistenciasRepository _repo;
 
         // Constructor con inyección de dependencias
-        public EmpleadosApiController(IEmpleadosRepository repo)
+        public AsistenciasApiController(IAsistenciasRepository repo)
         {
             _repo = repo;
         }
 
         // GET: api/empleados/activos
         [HttpGet("activos")]
-        public async Task<ActionResult<IEnumerable<Empleados>>> GetEmpleadosActivos()
+        public async Task<ActionResult<IEnumerable<Asistencias>>> GetEmpleadosActivos()
         {
-            var empleados = await _repo.GetAllEmpleadosAsync();
+            var aistencias = await _repo.GetAllAsistemciasAsync();
             //int contador = empleados.Count();
 
             return Ok(new
             {
                 success = true,
-                count = empleados.Count(),
-                data = empleados
+                count = aistencias.Count(),
+                data = aistencias
             });
         }
 
         // GET: api/empleados/buscar?termino=juan
         [HttpGet("buscar")]
-        public async Task<ActionResult<IEnumerable<Empleados>>> BuscarEmpleados(string nombre)
+        public async Task<ActionResult<IEnumerable<Asistencias>>> BuscarEmpleados(string nombre)
         {
             if (string.IsNullOrEmpty(nombre))
             {
                 return BadRequest(new { success = false, message = "El término de búsqueda es requerido" });
             }
 
-          var empleados = await _repo.GetEmployeByNameAsync(nombre);
+            var aistencias = await _repo.GetAsistemciaByObsAsync(nombre);
 
             return Ok(new
             {
                 success = true,
-                count = empleados.Count(),
-                data = empleados
+                count = aistencias.Count(),
+                data = aistencias
             });
         }
 
         // GET: api/empleados/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<Empleados>> GetEmpleado(int id)
+        public async Task<ActionResult<Asistencias>> GetEmpleado(int id)
         {
-            var empleado = await _repo.GetEmpleadoByIdAsync(id);
+            var aistencia = await _repo.GetAsistemciaByIdAsync(id);
 
-            if (empleado == null)
+            if (aistencia == null)
             {
-                return NotFound(new { success = false, message = "Empleado no encontrado" });
+                return NotFound(new { success = false, message = "Asistencia no encontrada." });
             }
 
-            return Ok(new { success = true, data = empleado });
+            return Ok(new { success = true, data = aistencia });
         }
     }
 }

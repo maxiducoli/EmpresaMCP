@@ -1,82 +1,714 @@
 ﻿@{
-    ViewData["Title"] = "Chat con IA - Empleados";
+    ViewData["Title"] = "Chat con IA - Consulta sobre Empleados";
+    var pregunta = ViewBag.Pregunta as string ?? "";
+    var respuesta = ViewBag.Respuesta as string ?? "";
+    var datosCrudos = ViewBag.DatosCrudos as string ?? "";
 }
 
-<div class="container mt-5">
-    <h1 class="mb-4">Chat con IA - Consulta sobre Empleados</h1>
-
+<div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-8">
-            <div class="card">
+        <!-- Columna izquierda: Formulario y resultados -->
+        <div class="col-lg-9">
+            <!-- Formulario de pregunta -->
+            <div class="card shadow-sm mb-4 border-primary">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Hacé tu pregunta</h5>
+                    <h5 class="mb-0"><i class="bi bi-chat-dots-fill"></i> Hacé tu pregunta</h5>
                 </div>
                 <div class="card-body">
                     <form asp-action="Consultar" method="post">
-                        @Html.AntiForgeryToken()
                         <div class="mb-3">
-                            <label for="pregunta" class="form-label">¿Qué querés saber?</label>
-                            <textarea class="form-control"
+                            <label for="pregunta" class="form-label fw-bold">¿Qué querés saber?</label>
+                            <textarea class="form-control form-control-lg"
                                       id="pregunta"
                                       name="pregunta"
                                       rows="3"
-                                      placeholder="Ejemplo: ¿Cuántos empleados hay en la empresa?"
-                                      required></textarea>
+                                      placeholder="Ejemplo: ¿Cuál es el sueldo promedio de los gerentes?"
+                                      required>@pregunta</textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            Consultar
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-send-fill"></i> Consultar
                         </button>
                     </form>
                 </div>
             </div>
 
-            @if (ViewBag.Pregunta != null)
+            <!-- Tu pregunta -->
+            @if (!string.IsNullOrEmpty(pregunta))
             {
-                <div class="card mt-4">
+                <div class="card shadow-sm mb-4 border-success">
                     <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">Tu pregunta</h5>
+                        <h5 class="mb-0"><i class="bi bi-person-fill"></i> Tu pregunta</h5>
                     </div>
-                    <div class="card-body">
-                        <p class="mb-0">@ViewBag.Pregunta</p>
-                    </div>
-                </div>
-
-                <div class="card mt-3">
-                    <div class="card-header bg-info text-white">
-                        <h5 class="mb-0">Respuesta de la IA</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0">@ViewBag.Respuesta</p>
+                    <div class="card-body bg-success bg-opacity-10">
+                        <p class="mb-0 fs-5 fw-semibold">@pregunta</p>
                     </div>
                 </div>
             }
 
-            <div class="card mt-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Ejemplos de preguntas</h5>
+            <!-- Respuesta de la IA -->
+            @if (!string.IsNullOrEmpty(respuesta))
+            {
+                <div class="card shadow-sm mb-4 border-info">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-robot"></i> Respuesta de la IA</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-chat-quote-fill"></i>
+                            @respuesta
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DATOS EN GRILLA POR ENTIDAD -->
+                <div class="card shadow-sm mb-4 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <h5 class="mb-0"><i class="bi bi-database-fill"></i> Datos Consultados</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(datosCrudos))
+                        {
+                            <!-- EMPLEADOS -->
+                            @if (datosCrudos.Contains("[EMPLEADOS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-primary mb-3">
+                                        <i class="bi bi-people-fill"></i> 👥 Empleados
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Legajo</th>
+                                                    <th>Nombre</th>
+                                                    <th>Apellido</th>
+                                                    <th>Email</th>
+                                                    <th>Departamento</th>
+                                                    <th>Cargo</th>
+                                                    <th>Activo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-empleados">
+                                                <tr><td colspan="8" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- CARGOS -->
+                            @if (datosCrudos.Contains("[CARGOS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-success mb-3">
+                                        <i class="bi bi-briefcase-fill"></i> 💼 Cargos
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-success">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Descripción</th>
+                                                    <th>Nivel Jerárquico</th>
+                                                    <th>Salario Mínimo</th>
+                                                    <th>Salario Máximo</th>
+                                                    <th>Requiere Título</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-cargos">
+                                                <tr><td colspan="7" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- DEPARTAMENTOS -->
+                            @if (datosCrudos.Contains("[DEPARTAMENTOS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-warning mb-3">
+                                        <i class="bi bi-building-fill"></i> 🏢 Departamentos
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-warning">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Descripción</th>
+                                                    <th>Planta</th>
+                                                    <th>Presupuesto Anual</th>
+                                                    <th>Activo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-departamentos">
+                                                <tr><td colspan="6" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- SECTORES -->
+                            @if (datosCrudos.Contains("[SECTORES"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-danger mb-3">
+                                        <i class="bi bi-grid-fill"></i> 📍 Sectores
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-danger">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Descripción</th>
+                                                    <th>Departamento</th>
+                                                    <th>Jefe Sector</th>
+                                                    <th>Activo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-sectores">
+                                                <tr><td colspan="6" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- PLANTAS -->
+                            @if (datosCrudos.Contains("[PLANTAS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-info mb-3">
+                                        <i class="bi bi-geo-alt-fill"></i> 🏭 Plantas
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-info">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Nombre</th>
+                                                    <th>Dirección</th>
+                                                    <th>Ciudad</th>
+                                                    <th>Provincia</th>
+                                                    <th>Teléfono</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-plantas">
+                                                <tr><td colspan="7" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- SALARIOS -->
+                            @if (datosCrudos.Contains("[SALARIOS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-success mb-3">
+                                        <i class="bi bi-cash-coin"></i> 💰 Salarios
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-success">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Empleado</th>
+                                                    <th>Salario Base</th>
+                                                    <th>Bonificaciones</th>
+                                                    <th>Deducciones</th>
+                                                    <th>Salario Neto</th>
+                                                    <th>Moneda</th>
+                                                    <th>Vigencia</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-salarios">
+                                                <tr><td colspan="8" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- CONTRATOS -->
+                            @if (datosCrudos.Contains("[CONTRATOS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-primary mb-3">
+                                        <i class="bi bi-file-earmark-text-fill"></i> 📄 Contratos
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-primary">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Empleado</th>
+                                                    <th>Tipo</th>
+                                                    <th>Modalidad</th>
+                                                    <th>Fecha Inicio</th>
+                                                    <th>Fecha Fin</th>
+                                                    <th>Activo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-contratos">
+                                                <tr><td colspan="7" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- ASISTENCIAS -->
+                            @if (datosCrudos.Contains("[ASISTENCIAS"))
+                            {
+                                <div class="datos-seccion mb-4">
+                                    <h6 class="fw-bold text-danger mb-3">
+                                        <i class="bi bi-calendar-check-fill"></i> 📅 Asistencias
+                                    </h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-bordered align-middle">
+                                            <thead class="table-danger">
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Empleado</th>
+                                                    <th>Fecha</th>
+                                                    <th>Entrada</th>
+                                                    <th>Salida</th>
+                                                    <th>Horas</th>
+                                                    <th>Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tabla-asistencias">
+                                                <tr><td colspan="7" class="text-center">Cargando datos...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <!-- Datos crudos colapsable (para debugging) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">
+                            <button class="btn btn-sm btn-link text-white" type="button" data-bs-toggle="collapse" data-bs-target="#datosCrudosCollapse">
+                                <i class="bi bi-code-slash"></i> Ver JSON crudo (debugging)
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="datosCrudosCollapse" class="collapse">
+                        <div class="card-body">
+                            <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 12px;">@datosCrudos</pre>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Ejemplos de preguntas -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightbulb-fill"></i> Ejemplos de preguntas</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-unstyled">
-                        <li class="mb-2">¿Cuántos empleados hay en total?</li>
-                        <li class="mb-2">Buscá empleados llamados Carlos</li>
-                        <li class="mb-2">Mostrame los datos del empleado 1</li>
-                        <li class="mb-2">¿Qué empleados ingresaron en 2015?</li>
-                    </ul>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-primary bg-opacity-10 rounded">
+                                <h6 class="fw-bold text-primary">👥 Empleados</h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Cuántos empleados hay en total?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">Buscá empleados llamados Carlos</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">Mostrame los datos del empleado 1</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-success bg-opacity-10 rounded">
+                                <h6 class="fw-bold text-success">💰 Salarios y Cargos</h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Cuál es el sueldo promedio de los gerentes?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Qué cargos existen en la empresa?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Cuánto gana un Supervisor?</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-warning bg-opacity-10 rounded">
+                                <h6 class="fw-bold text-warning">🏢 Organización</h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Qué departamentos tiene la empresa?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Qué sectores hay en Ventas?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Qué plantas tiene la empresa?</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-danger bg-opacity-10 rounded">
+                                <h6 class="fw-bold text-danger">📅 Asistencias y Contratos</h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Cómo son las asistencias este mes?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Qué tipo de contratos hay?</a></li>
+                                    <li><a href="#" class="ejemplo-pregunta text-decoration-none">¿Cuántos empleados tienen contrato temporal?</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-warning">
-                    <h5 class="mb-0">Información</h5>
+        <!-- Columna derecha: Información -->
+        <div class="col-lg-3">
+            <div class="card shadow-sm mb-4 border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-info-circle-fill"></i> Información</h5>
                 </div>
                 <div class="card-body">
-                    <p>Este chat te permite consultar información de empleados usando inteligencia artificial.</p>
-                    <p><strong>Modelo:</strong> Qwen 2.5 Coder 7B</p>
-                    <p><strong>Ejecución:</strong> Local (Ollama)</p>
+                    <p class="mb-2">Este chat te permite consultar información de la empresa usando inteligencia artificial.</p>
+                    <hr class="my-2">
+                    <p class="mb-1"><strong>🤖 Modelo:</strong> Qwen 2.5 Coder 7B</p>
+                    <p class="mb-1"><strong>⚙️ Ejecución:</strong> Local (Ollama)</p>
+                    <p class="mb-0"><strong>📊 Datos:</strong> SQL Server LocalDB</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-dark">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="bi bi-code-slash"></i> Tecnologías</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary"></i> ASP.NET Core 8</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Entity Framework Core</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-warning"></i> Repository Pattern</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-danger"></i> Ollama (IA Local)</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-info"></i> Bootstrap 5</li>
+                        <li class="mb-0"><i class="bi bi-check-circle-fill text-secondary"></i> SQL Server</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Click en ejemplos de preguntas → completar el textarea
+        document.querySelectorAll('.ejemplo-pregunta').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.getElementById('pregunta').value = this.textContent;
+            });
+        });
+
+        // Parsear y mostrar datos JSON en las tablas
+        document.addEventListener('DOMContentLoaded', function() {
+            const datosCrudosRaw = @Html.Raw(Json.Serialize(datosCrudos));
+
+            console.log('🔍 Datos crudos recibidos:', datosCrudosRaw);
+
+            if (!datosCrudosRaw || datosCrudosRaw === 'No se pudieron obtener datos de la base de datos.') {
+                console.warn('⚠️ No hay datos para mostrar');
+                return;
+            }
+
+            try {
+                // Intentar parsear el JSON completo primero
+                let datosCompletos = {};
+
+                // Buscar cada sección por su marcador
+                const marcadores = {
+                    'empleados': '[EMPLEADOS',
+                    'cargos': '[CARGOS',
+                    'departamentos': '[DEPARTAMENTOS',
+                    'sectores': '[SECTORES',
+                    'plantas': '[PLANTAS',
+                    'salarios': '[SALARIOS',
+                    'contratos': '[CONTRATOS',
+                    'asistencias': '[ASISTENCIAS'
+                };
+
+                for (const [key, marcador] of Object.entries(marcadores)) {
+                    if (datosCrudosRaw.includes(marcador)) {
+                        console.log(`✅ Encontrado: ${marcador}`);
+
+                        // Extraer JSON entre el marcador y el siguiente marcador o fin
+                        const inicio = datosCrudosRaw.indexOf(marcador) + marcador.length;
+                        let fin = datosCrudosRaw.indexOf('[', inicio);
+                        if (fin === -1) fin = datosCrudosRaw.length;
+
+                        const jsonStr = datosCrudosRaw.substring(inicio, fin).trim();
+                        console.log(`📦 JSON de ${key}:`, jsonStr.substring(0, 100) + '...');
+
+                        try {
+                            // Intentar parsear como array u objeto
+                            if (jsonStr.startsWith('[') || jsonStr.startsWith('{')) {
+                                datosCompletos[key] = JSON.parse(jsonStr);
+                                console.log(`✅ Parseado ${key}:`, datosCompletos[key]);
+                            }
+                        } catch (e) {
+                            console.error(`❌ Error parseando ${key}:`, e);
+                        }
+                    }
+                }
+
+                // Llenar tablas con los datos parseados
+                if (datosCompletos.empleados) {
+                    console.log('📊 Llenando tabla Empleados...');
+                    llenarTablaEmpleados(datosCompletos.empleados);
+                }
+                if (datosCompletos.cargos) {
+                    console.log('📊 Llenando tabla Cargos...');
+                    llenarTablaCargos(datosCompletos.cargos);
+                }
+                if (datosCompletos.departamentos) {
+                    console.log('📊 Llenando tabla Departamentos...');
+                    llenarTablaDepartamentos(datosCompletos.departamentos);
+                }
+                if (datosCompletos.sectores) {
+                    console.log('📊 Llenando tabla Sectores...');
+                    llenarTablaSectores(datosCompletos.sectores);
+                }
+                if (datosCompletos.plantas) {
+                    console.log('📊 Llenando tabla Plantas...');
+                    llenarTablaPlantas(datosCompletos.plantas);
+                }
+                if (datosCompletos.salarios) {
+                    console.log('📊 Llenando tabla Salarios...');
+                    llenarTablaSalarios(datosCompletos.salarios);
+                }
+                if (datosCompletos.contratos) {
+                    console.log('📊 Llenando tabla Contratos...');
+                    llenarTablaContratos(datosCompletos.contratos);
+                }
+                if (datosCompletos.asistencias) {
+                    console.log('📊 Llenando tabla Asistencias...');
+                    llenarTablaAsistencias(datosCompletos.asistencias);
+                }
+
+            } catch (error) {
+                console.error('❌ Error general:', error);
+            }
+        });
+
+        // Funciones específicas para llenar cada tabla
+        function llenarTablaEmpleados(datos) {
+            const tbody = document.getElementById('tabla-empleados');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(e => `
+                <tr>
+                    <td>${e.empleadoID || e.EmpleadoID || '-'}</td>
+                    <td>${e.legajo || e.Legajo || '-'}</td>
+                    <td>${e.nombre || e.Nombre || '-'}</td>
+                    <td>${e.apellido || e.Apellido || '-'}</td>
+                    <td>${e.email || e.Email || '-'}</td>
+                    <td>${e.departamentoID || e.DepartamentoID || '-'}</td>
+                    <td>${e.cargoID || e.CargoID || '-'}</td>
+                    <td>${e.activo || e.Activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaCargos(datos) {
+            const tbody = document.getElementById('tabla-cargos');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(c => `
+                <tr>
+                    <td>${c.cargoID || c.CargoID || '-'}</td>
+                    <td>${c.nombre || c.Nombre || '-'}</td>
+                    <td>${c.descripcion || c.Descripcion || '-'}</td>
+                    <td>${c.nivelJerarquico || c.NivelJerarquico || '-'}</td>
+                    <td>${formatearMoneda(c.salarioMinimo || c.SalarioMinimo)}</td>
+                    <td>${formatearMoneda(c.salarioMaximo || c.SalarioMaximo)}</td>
+                    <td>${c.requiereTitulo || c.RequiereTitulo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaDepartamentos(datos) {
+            const tbody = document.getElementById('tabla-departamentos');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(d => `
+                <tr>
+                    <td>${d.departamentoID || d.DepartamentoID || '-'}</td>
+                    <td>${d.nombre || d.Nombre || '-'}</td>
+                    <td>${d.descripcion || d.Descripcion || '-'}</td>
+                    <td>${d.plantaID || d.PlantaID || '-'}</td>
+                    <td>${formatearMoneda(d.presupuestoAnual || d.PresupuestoAnual)}</td>
+                    <td>${d.activo || d.Activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaSectores(datos) {
+            const tbody = document.getElementById('tabla-sectores');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(s => `
+                <tr>
+                    <td>${s.sectorID || s.SectorID || '-'}</td>
+                    <td>${s.nombre || s.Nombre || '-'}</td>
+                    <td>${s.descripcion || s.Descripcion || '-'}</td>
+                    <td>${s.departamentoID || s.DepartamentoID || '-'}</td>
+                    <td>${s.jefeSectorID || s.JefeSectorID || '-'}</td>
+                    <td>${s.activo || s.Activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaPlantas(datos) {
+            const tbody = document.getElementById('tabla-plantas');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(p => `
+                <tr>
+                    <td>${p.plantaID || p.PlantaID || '-'}</td>
+                    <td>${p.nombre || p.Nombre || '-'}</td>
+                    <td>${p.direccion || p.Direccion || '-'}</td>
+                    <td>${p.ciudad || p.Ciudad || '-'}</td>
+                    <td>${p.provincia || p.Provincia || '-'}</td>
+                    <td>${p.telefono || p.Telefono || '-'}</td>
+                    <td>${p.email || p.Email || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaSalarios(datos) {
+            const tbody = document.getElementById('tabla-salarios');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(s => `
+                <tr>
+                    <td>${s.salarioID || s.SalarioID || '-'}</td>
+                    <td>${s.empleadoID || s.EmpleadoID || '-'}</td>
+                    <td>${formatearMoneda(s.salarioBase || s.SalarioBase)}</td>
+                    <td>${formatearMoneda(s.bonificaciones || s.Bonificaciones)}</td>
+                    <td>${formatearMoneda(s.deducciones || s.Deducciones)}</td>
+                    <td>${formatearMoneda(s.salarioNeto || s.SalarioNeto)}</td>
+                    <td>${s.moneda || s.Moneda || '-'}</td>
+                    <td>${formatearFecha(s.fechaVigencia || s.FechaVigencia)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaContratos(datos) {
+            const tbody = document.getElementById('tabla-contratos');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(c => `
+                <tr>
+                    <td>${c.contratoID || c.ContratoID || '-'}</td>
+                    <td>${c.empleadoID || c.EmpleadoID || '-'}</td>
+                    <td>${c.tipoContrato || c.TipoContrato || '-'}</td>
+                    <td>${c.modalidadTrabajo || c.ModalidadTrabajo || '-'}</td>
+                    <td>${formatearFecha(c.fechaInicio || c.FechaInicio)}</td>
+                    <td>${formatearFecha(c.fechaFin || c.FechaFin)}</td>
+                    <td>${c.activo || c.Activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function llenarTablaAsistencias(datos) {
+            const tbody = document.getElementById('tabla-asistencias');
+            if (!tbody) return;
+
+            const items = Array.isArray(datos) ? datos : (datos.data || [datos]);
+
+            if (!items || items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay datos</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = items.map(a => `
+                <tr>
+                    <td>${a.asistenciaID || a.AsistenciaID || '-'}</td>
+                    <td>${a.empleadoID || a.EmpleadoID || '-'}</td>
+                    <td>${formatearFecha(a.fecha || a.Fecha)}</td>
+                    <td>${formatearHora(a.horaEntrada || a.HoraEntrada)}</td>
+                    <td>${formatearHora(a.horaSalida || a.HoraSalida)}</td>
+                    <td>${a.horasTrabajadas || a.HorasTrabajadas || '-'}</td>
+                    <td>${a.estado || a.Estado || '-'}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Funciones de formateo
+        function formatearMoneda(valor) {
+            if (!valor && valor !== 0) return '-';
+            return '$ ' + Number(valor).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function formatearFecha(valor) {
+            if (!valor) return '-';
+            try {
+                return new Date(valor).toLocaleDateString('es-AR');
+            } catch {
+                return valor;
+            }
+        }
+
+        function formatearHora(valor) {
+            if (!valor) return '-';
+            return valor.toString().substring(0, 5);
+        }
+    </script>
+}

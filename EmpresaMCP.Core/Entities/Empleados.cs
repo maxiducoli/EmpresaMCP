@@ -1,6 +1,6 @@
 ﻿namespace EmpresaMCP.Core.Entities
 {
-    public class Empleado
+    public class Empleados
     {
         // Propiedad de clave primaria
         public int EmpleadoID { get; set; }
@@ -46,5 +46,6 @@
         // Auditoría
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
+        public string? Sexo { get; set; }
     }
 }

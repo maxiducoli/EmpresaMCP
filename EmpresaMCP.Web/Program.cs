@@ -8,7 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<EmpresaMCP.Core.Data.EmpresaDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("EmpresaDB")));
 
-builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+
+builder.Services.AddScoped<IAsistenciasRepository, AsistenciasRepository>();
+builder.Services.AddScoped<ICargosRepository, CargosRepository>();
+builder.Services.AddScoped<IContratosRepository, ContratosRepository>();
+builder.Services.AddScoped<IDepartamentosRepository, DepartamentosRepository>();
+builder.Services.AddScoped<IEmpleadosRepository, EmpleadosRepository>();
+builder.Services.AddScoped<IPlantasRepository, PlantasRepository>();
+builder.Services.AddScoped<ISalariosRepository, SalariosRepository>();
+builder.Services.AddScoped<ISectoresRepository, SectoresRepository>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -35,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Chat}/{action=Index}/{id?}");
 
 app.Run();

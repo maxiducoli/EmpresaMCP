@@ -1,6 +1,6 @@
 ﻿namespace EmpresaMCP.Core.Entities
 {
-    public class Departamento
+    public class Departamentos
     {
         // Propiedad de clave primaria
         public int DepartamentoID { get; set; }
